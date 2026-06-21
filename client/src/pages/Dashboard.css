@@ -1,0 +1,313 @@
+/* ========================
+   Dashboard Styles
+   ======================== */
+
+.dash-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  font-family: 'Inter', sans-serif;
+  color: #f1f5f9;
+}
+
+.dash-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.75rem 2rem;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dash-hello {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.dash-sub {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0.25rem 0 0;
+}
+
+.dash-topbar-stats,
+.dash-topbar-right {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dash-nav-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: background 0.15s, border-color 0.15s;
+}
+.dash-nav-btn:hover {
+  background: rgba(99,102,241,0.15);
+  border-color: rgba(99,102,241,0.3);
+}
+
+.dash-upgrade-btn {
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.dash-upgrade-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.dash-pro-badge {
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.dash-streak-badge {
+  background: rgba(245,158,11,0.15);
+  border: 1px solid rgba(245,158,11,0.3);
+  color: #fbbf24;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.dash-due-badge {
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.3);
+  color: #818cf8;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.dash-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.dash-section {}
+
+.dash-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+}
+
+/* Empty state */
+.dash-empty {
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  color: #475569;
+}
+.dash-empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.dash-empty p    { font-size: 0.9rem; margin: 0; }
+
+/* Courses grid */
+.dash-courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.dash-course-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+.dash-course-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(99,102,241,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.dash-course-card:hover {
+  border-color: rgba(99,102,241,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+.dash-course-card:hover::before { opacity: 1; }
+
+.dash-course-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dash-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.dash-status--ready      { background: rgba(16,185,129,0.15); color: #34d399; }
+.dash-status--processing { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.dash-status--error      { background: rgba(239,68,68,0.15);  color: #f87171; }
+
+.dash-course-streak {
+  font-size: 0.75rem;
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.dash-course-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dash-course-desc {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mastery bar */
+.dash-mastery {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dash-mastery-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.dash-mastery-pct {
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.dash-mastery-track {
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.dash-mastery-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s ease, background 0.3s;
+}
+
+/* Quick action buttons */
+.dash-course-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.dash-action-btn {
+  flex: 1;
+  padding: 0.45rem 0.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+}
+.dash-action-btn:hover {
+  background: rgba(99,102,241,0.15);
+  border-color: rgba(99,102,241,0.3);
+  color: #a5b4fc;
+}
+
+@media (max-width: 600px) {
+  .dash-body { padding: 1.25rem; }
+  .dash-topbar { padding: 1.25rem; }
+  .dash-hello { font-size: 1.4rem; }
+}
+
+/* Source type icon on card */
+.dash-src-icon {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* Concept count row */
+.dash-concept-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.dash-concept-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.18rem 0.55rem;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #a78bfa;
+}

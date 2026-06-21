@@ -1,0 +1,336 @@
+/* ==============================
+   Flashcard Review Page Styles
+   ============================== */
+
+.fc-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  font-family: 'Inter', sans-serif;
+  color: #f1f5f9;
+}
+
+.fc-header {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.fc-back {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.fc-back:hover { background: rgba(255,255,255,0.15); color: #f1f5f9; }
+
+.fc-meta { display: flex; align-items: center; gap: 0.75rem; }
+
+.fc-count {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.fc-tag {
+  background: rgba(139,92,246,0.2);
+  color: #a78bfa;
+  border: 1px solid rgba(139,92,246,0.3);
+  padding: 0.2rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Progress bar */
+.fc-progress-track {
+  width: 100%;
+  max-width: 680px;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.fc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* Card flip */
+.fc-card-area {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 640px;
+  margin-bottom: 2rem;
+}
+
+.fc-card {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fc-card--flipped { transform: rotateY(180deg); }
+
+.fc-card-inner {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  transform-style: preserve-3d;
+}
+
+.fc-card-front,
+.fc-card-back {
+  position: absolute;
+  inset: 0;
+  min-height: 280px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 20px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.fc-card-front {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+.fc-card-back {
+  background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+  border: 1px solid rgba(139,92,246,0.3);
+  transform: rotateY(180deg);
+  box-shadow: 0 25px 50px rgba(99,102,241,0.2);
+}
+
+.fc-side-label {
+  position: absolute;
+  top: 1rem;
+  left: 1.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.fc-card-text {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #f1f5f9;
+  font-weight: 400;
+  margin: 0;
+}
+
+.fc-hint {
+  position: absolute;
+  bottom: 1rem;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.2);
+  margin: 0;
+}
+
+/* Rating buttons */
+.fc-ratings {
+  width: 100%;
+  max-width: 640px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.35s ease;
+  pointer-events: none;
+}
+.fc-ratings--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.fc-ratings-label {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
+}
+
+.fc-ratings-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.fc-rating-btn {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid var(--rating-color);
+  border-radius: 14px;
+  padding: 0.85rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  transition: all 0.2s;
+  color: #f1f5f9;
+}
+.fc-rating-btn:hover {
+  background: color-mix(in srgb, var(--rating-color) 20%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--rating-color) 30%, transparent);
+}
+.fc-rating-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.fc-rating-emoji { font-size: 1.5rem; }
+.fc-rating-label { font-size: 0.85rem; font-weight: 700; color: var(--rating-color); }
+.fc-rating-desc  { font-size: 0.65rem; color: #94a3b8; text-align: center; }
+
+/* Session complete */
+.fc-complete {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.fc-complete-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 3rem;
+  max-width: 480px;
+  width: 90%;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.fc-complete-icon { font-size: 4rem; margin-bottom: 1rem; }
+.fc-complete-title { font-size: 2rem; font-weight: 800; color: #f1f5f9; margin: 0 0 0.5rem; }
+.fc-complete-sub { color: #94a3b8; margin: 0 0 2rem; }
+
+.fc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.fc-stat-badge {
+  background: color-mix(in srgb, var(--badge-color) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--badge-color) 40%, transparent);
+  border-radius: 12px;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.fc-stat-count { font-size: 1.5rem; font-weight: 800; color: var(--badge-color); }
+.fc-stat-label { font-size: 0.7rem; color: #94a3b8; }
+
+.fc-complete-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Utility buttons */
+.fc-btn-primary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.fc-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+
+.fc-btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: #94a3b8;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 0.75rem 1.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.fc-btn-secondary:hover { background: rgba(255,255,255,0.15); color: #f1f5f9; }
+
+/* Loading / Error */
+.fc-center {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  gap: 1rem;
+  color: #94a3b8;
+  background: #0f172a;
+}
+
+.fc-spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(99,102,241,0.3);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.fc-error { color: #f87171; font-size: 0.9rem; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .fc-ratings-row { grid-template-columns: repeat(2, 1fr); }
+  .fc-stats-grid   { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Anki export button */
+.fc-export-btn {
+  padding: 0.4rem 0.9rem;
+  background: var(--bg-card, #1e293b);
+  border: 1px solid var(--border, #334155);
+  border-radius: 8px;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+.fc-export-btn:hover {
+  background: var(--accent-dim, rgba(99,102,241,0.15));
+  color: var(--accent, #6366f1);
+  border-color: var(--accent, #6366f1);
+}
+.fc-export-btn:disabled { opacity: 0.5; cursor: default; }

@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import './styles/shared.css';
+
+
+/* ── Theme Tokens ──────────────────────────────────── */
+:root {
+  --bg:           #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card:      #1e293b;
+  --bg-hover:     #334155;
+  --border:       #334155;
+  --border-light: #475569;
+  --text:         #f1f5f9;
+  --text-muted:   #94a3b8;
+  --text-dim:     #64748b;
+  --accent:       #6366f1;
+  --accent-hover: #818cf8;
+  --accent-dim:   rgba(99,102,241,0.15);
+  --green:        #10b981;
+  --yellow:       #f59e0b;
+  --red:          #ef4444;
+  --radius:       12px;
+  --radius-sm:    8px;
+  --shadow:       0 4px 24px rgba(0,0,0,0.4);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.2);
+}
+
+[data-theme="light"] {
+  --bg:           #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card:      #ffffff;
+  --bg-hover:     #e2e8f0;
+  --border:       #e2e8f0;
+  --border-light: #cbd5e1;
+  --text:         #0f172a;
+  --text-muted:   #475569;
+  --text-dim:     #94a3b8;
+  --accent:       #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-dim:   rgba(99,102,241,0.1);
+  --shadow:       0 4px 24px rgba(0,0,0,0.08);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* ── Global Reset ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.2s, color 0.2s;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 { margin: 0; }
+p { margin: 0; }
+
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-light); }

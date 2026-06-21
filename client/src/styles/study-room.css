@@ -1,0 +1,188 @@
+/* ========================
+   Study Room Styles
+   ======================== */
+
+.sr-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  display: flex;
+  font-family: 'Inter', sans-serif;
+  color: #f1f5f9;
+}
+
+/* Sidebar */
+.sr-sidebar {
+  width: 280px;
+  min-height: 100vh;
+  background: rgba(0,0,0,0.3);
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  gap: 1.25rem;
+  flex-shrink: 0;
+}
+
+.sr-back {
+  align-self: flex-start;
+  font-size: 0.8rem;
+}
+
+.sr-sidebar-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.sr-members {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sr-member {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.sr-member--me {
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.2);
+}
+
+.sr-rank  { color: #94a3b8; font-weight: 700; font-size: 0.78rem; width: 24px; }
+.sr-name  { flex: 1; color: #e2e8f0; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sr-score { color: #a78bfa; font-weight: 800; font-size: 0.9rem; }
+
+.sr-empty { color: #475569; font-size: 0.8rem; text-align: center; padding: 1rem; }
+
+/* Chat/Activity */
+.sr-chat { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; min-height: 0; }
+.sr-chat-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.sr-chat-feed {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 0;
+  max-height: 240px;
+}
+.sr-chat-msg {
+  font-size: 0.78rem;
+  color: #64748b;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Main area */
+.sr-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Lobby */
+.sr-lobby {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.sr-lobby-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 3rem;
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+}
+
+.sr-lobby-icon  { font-size: 3.5rem; margin-bottom: 1rem; }
+.sr-lobby-title { font-size: 1.75rem; font-weight: 800; color: #f1f5f9; margin: 0 0 0.4rem; }
+.sr-lobby-sub   { color: #94a3b8; margin: 0 0 0.5rem; font-size: 0.95rem; }
+.sr-lobby-hint  { color: #64748b; font-size: 0.85rem; margin: 0 0 1.75rem; line-height: 1.6; }
+
+.sr-lobby-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+
+/* Quiz in room */
+.sr-quiz {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.5rem;
+}
+
+.sr-quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 620px;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.sr-my-score {
+  color: #a78bfa;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.sr-quiz-progress {
+  width: 100%;
+  max-width: 620px;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.sr-quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.sr-question-card {
+  width: 100%;
+  max-width: 620px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .sr-root { flex-direction: column; }
+  .sr-sidebar { width: 100%; min-height: auto; flex-direction: row; flex-wrap: wrap; }
+  .sr-chat { display: none; }
+}
