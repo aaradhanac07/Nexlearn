@@ -15,6 +15,16 @@ export default function KnowledgeGraph() {
   const { id: courseId } = useParams()
   const navigate = useNavigate()
   const api = useAxios()
+  const [isLight, setIsLight] = useState(false)
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.getAttribute('data-theme') === 'light')
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    setIsLight(document.documentElement.getAttribute('data-theme') === 'light')
+    return () => observer.disconnect()
+  }, [])
 
   const [graphData, setGraphData] = useState({ nodes: [], links: [] })
   const [loading, setLoading]     = useState(true)
@@ -75,7 +85,7 @@ export default function KnowledgeGraph() {
       source:   e.source,
       target:   e.target,
       relation: e.relation,
-      color:    'rgba(148,163,184,0.4)'
+      color:    isLight ? 'rgba(15,23,42,0.2)' : 'rgba(148,163,184,0.4)'
     }))
 
     return { nodes, links }
@@ -138,14 +148,16 @@ export default function KnowledgeGraph() {
               ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI)
               ctx.fillStyle = node.color
               ctx.fill()
-              ctx.strokeStyle = node === selected ? '#ffffff' : 'rgba(255,255,255,0.3)'
+              ctx.strokeStyle = node === selected 
+                ? (isLight ? '#0f172a' : '#ffffff') 
+                : (isLight ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.3)')
               ctx.lineWidth = node === selected ? 2 : 1
               ctx.stroke()
 
               // Label
               ctx.textAlign = 'center'
               ctx.textBaseline = 'middle'
-              ctx.fillStyle = '#ffffff'
+              ctx.fillStyle = isLight ? '#0f172a' : '#ffffff'
               ctx.fillText(label, node.x, node.y + radius + fontSize + 2)
             }}
             linkLabel={link => link.relation}
@@ -154,8 +166,8 @@ export default function KnowledgeGraph() {
             linkDirectionalArrowRelPos={1}
             linkWidth={1.5}
             onNodeClick={handleNodeClick}
-            backgroundColor="#0f172a"
-            width={window.innerWidth - (selected ? 320 : 0)}
+            backgroundColor={isLight ? '#f8fafc' : '#0f172a'}
+            width={window.innerWidth - (selected && window.innerWidth > 768 ? 320 : 0)}
           />
 
           {selected && (

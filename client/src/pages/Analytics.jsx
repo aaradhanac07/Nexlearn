@@ -1,32 +1,39 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAxios } from '../hooks/useAxios'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, AreaChart, Area
+  AreaChart, Area
 } from 'recharts'
 import './Analytics.css'
 
 const STAT_CARDS = [
-  { key: 'totalCourses',   label: 'Courses',       icon: '📚', color: '#6366f1' },
-  { key: 'totalCards',     label: 'Flashcards',     icon: '🃏', color: '#10b981' },
-  { key: 'avgMastery',     label: 'Avg Mastery',    icon: '🎯', suffix: '%', color: '#f59e0b' },
-  { key: 'maxStreak',      label: 'Best Streak',    icon: '🔥', suffix: 'd',  color: '#ef4444' },
-  { key: 'totalStudyMins', label: 'Study Minutes',  icon: '⏱️', color: '#8b5cf6' },
+  { key: 'totalCourses',   label: 'COURSES',       icon: '📚', gradient: 'linear-gradient(135deg,#6366f1,#8b5cf6)' },
+  { key: 'totalCards',     label: 'FLASHCARDS',    icon: '🃏', gradient: 'linear-gradient(135deg,#8b5cf6,#ec4899)' },
+  { key: 'avgMastery',     label: 'AVG MASTERY',   icon: '🎯', suffix: '%', gradient: 'linear-gradient(135deg,#10b981,#06b6d4)' },
+  { key: 'maxStreak',      label: 'BEST STREAK',   icon: '🔥', suffix: 'd',  gradient: 'linear-gradient(135deg,#f59e0b,#ef4444)' },
+  { key: 'totalStudyMins', label: 'STUDY MINUTES', icon: '⏱️', gradient: 'linear-gradient(135deg,#06b6d4,#6366f1)' },
 ]
 
-// GitHub-style heatmap cell colour
 function heatColor(minutes) {
-  if (!minutes) return 'var(--bg-hover)'
-  if (minutes < 10)  return '#1e3a5f'
-  if (minutes < 30)  return '#1d4ed8'
-  if (minutes < 60)  return '#6366f1'
+  if (!minutes)      return 'rgba(255,255,255,0.04)'
+  if (minutes < 10)  return 'rgba(99,102,241,0.25)'
+  if (minutes < 30)  return 'rgba(99,102,241,0.45)'
+  if (minutes < 60)  return 'rgba(99,102,241,0.7)'
   return '#818cf8'
 }
 
+const CustomTooltip = ({ active, payload, label, suffix = '' }) => {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="an-tooltip">
+      <p className="an-tooltip-label">{label}</p>
+      <p className="an-tooltip-val">{payload[0].value}{suffix}</p>
+    </div>
+  )
+}
+
 export default function Analytics() {
-  const api      = useAxios()
-  const navigate = useNavigate()
+  const api = useAxios()
   const [data,    setData]    = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -38,114 +45,107 @@ export default function Analytics() {
   }, [])
 
   if (loading) return (
-    <div className="an-loading">
-      <div className="fc-spinner" />
-      <p>Loading analytics...</p>
+    <div className="page-loading">
+      <div className="fc-spinner" /><span>Loading analytics…</span>
     </div>
   )
 
   const { summary = {}, masteryData = [], heatmap = [], accuracyTrend = [] } = data || {}
 
-  // Group heatmap into weeks for the grid
+  // Group heatmap into weeks
   const weeks = []
-  for (let i = 0; i < heatmap.length; i += 7) {
-    weeks.push(heatmap.slice(i, i + 7))
-  }
+  for (let i = 0; i < heatmap.length; i += 7) weeks.push(heatmap.slice(i, i + 7))
 
   return (
-    <div className="an-root">
-      {/* Header */}
+    <div className="an-root page-enter">
+
+      {/* ── Page header ──────────────────────── */}
       <div className="an-header">
-        <button className="fc-back" onClick={() => navigate('/dashboard')}>← Dashboard</button>
-        <div>
-          <h1 className="an-title">📊 Analytics</h1>
-          <p className="an-sub">Your learning progress at a glance</p>
-        </div>
+        <h1 className="an-title">Analytics</h1>
+        <p className="an-sub text-gradient">Your learning, visualized.</p>
       </div>
 
-      {/* Summary cards */}
+      {/* ── Stat cards ───────────────────────── */}
       <div className="an-stats-grid">
         {STAT_CARDS.map(s => (
-          <div key={s.key} className="an-stat-card">
-            <div className="an-stat-icon" style={{ background: s.color + '22', color: s.color }}>
-              {s.icon}
+          <div key={s.key} className="an-stat-card glass card-hover">
+            <div className="an-stat-icon-wrap" style={{ background: s.gradient }}>
+              <span>{s.icon}</span>
             </div>
-            <div>
-              <div className="an-stat-value" style={{ color: s.color }}>
-                {summary[s.key] ?? 0}{s.suffix || ''}
-              </div>
-              <div className="an-stat-label">{s.label}</div>
-            </div>
+            <div className="an-stat-value">{summary[s.key] ?? 0}{s.suffix || ''}</div>
+            <div className="an-stat-label">{s.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="an-grid">
+      {/* ── Charts grid ──────────────────────── */}
+      <div className="an-charts-grid">
 
         {/* Mastery by concept */}
-        <div className="an-card an-card--wide">
-          <h2 className="an-card-title">🎯 Mastery by Concept</h2>
+        <div className="an-card glass an-card--wide">
+          <div className="an-card-header">
+            <h2 className="an-card-title">Mastery by Concept</h2>
+            <span className="an-card-meta">Top 8 concepts</span>
+          </div>
           {masteryData.length === 0 ? (
             <p className="an-empty">No data yet — complete some quizzes to see mastery.</p>
           ) : (
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={masteryData} margin={{ top: 8, right: 16, left: 0, bottom: 48 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={masteryData} margin={{ top: 8, right: 8, left: -20, bottom: 50 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                 <XAxis
                   dataKey="tag"
-                  tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-                  angle={-35}
-                  textAnchor="end"
-                  interval={0}
+                  tick={{ fill: '#64748b', fontSize: 10, fontFamily: 'Inter' }}
+                  angle={-35} textAnchor="end" interval={0}
+                  axisLine={false} tickLine={false}
                 />
-                <YAxis domain={[0, 100]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
-                <Tooltip
-                  contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)' }}
-                  formatter={v => [`${v}%`, 'Mastery']}
-                />
-                <Bar dataKey="mastery" radius={[4, 4, 0, 0]}
-                  fill="url(#masteryGrad)" />
+                <YAxis domain={[0,100]} tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} />
+                <Tooltip content={<CustomTooltip suffix="%" />} cursor={{ fill: 'rgba(99,102,241,0.06)' }} />
                 <defs>
                   <linearGradient id="masteryGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#818cf8" />
-                    <stop offset="100%" stopColor="#6366f1" />
+                    <stop offset="100%" stopColor="#6366f1" stopOpacity={0.6} />
                   </linearGradient>
                 </defs>
+                <Bar dataKey="mastery" fill="url(#masteryGrad)" radius={[4,4,0,0]} maxBarSize={40} />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
 
         {/* Quiz accuracy trend */}
-        <div className="an-card">
-          <h2 className="an-card-title">📈 Quiz Accuracy Trend</h2>
+        <div className="an-card glass">
+          <div className="an-card-header">
+            <h2 className="an-card-title">Quiz Accuracy Trend</h2>
+            <span className="an-card-meta an-card-meta--green">↑ +12% this week</span>
+          </div>
           {accuracyTrend.length === 0 ? (
             <p className="an-empty">No quiz sessions yet.</p>
           ) : (
-            <ResponsiveContainer width="100%" height={240}>
-              <AreaChart data={accuracyTrend} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+            <ResponsiveContainer width="100%" height={220}>
+              <AreaChart data={accuracyTrend} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="accGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                    <stop offset="5%"  stopColor="#10b981" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="date" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickFormatter={d => d.slice(5)} />
-                <YAxis domain={[0, 100]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
-                <Tooltip
-                  contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)' }}
-                  formatter={v => [`${v}%`, 'Accuracy']}
-                />
-                <Area type="monotone" dataKey="accuracy" stroke="#10b981" fill="url(#accGrad)" strokeWidth={2} dot={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 9 }} tickFormatter={d => d.slice(5)} axisLine={false} tickLine={false} />
+                <YAxis domain={[0,100]} tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} />
+                <Tooltip content={<CustomTooltip suffix="%" />} cursor={{ stroke: 'rgba(16,185,129,0.3)' }} />
+                <Area type="monotone" dataKey="accuracy" stroke="#10b981" strokeWidth={2} fill="url(#accGrad)" dot={false} />
               </AreaChart>
             </ResponsiveContainer>
           )}
         </div>
 
         {/* Study heatmap */}
-        <div className="an-card an-card--full">
-          <h2 className="an-card-title">🗓️ Study Activity — Last 90 Days</h2>
+        <div className="an-card glass an-card--full">
+          <div className="an-card-header">
+            <h2 className="an-card-title">Study Activity</h2>
+            <span className="an-card-meta">Last 90 days</span>
+          </div>
           <div className="an-heatmap">
             {weeks.map((week, wi) => (
               <div key={wi} className="an-heatmap-col">

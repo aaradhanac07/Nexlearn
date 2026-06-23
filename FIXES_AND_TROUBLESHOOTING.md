@@ -1,5 +1,10 @@
 # NexLearn - Complete Setup & Troubleshooting Guide
+cd server
+node dev-with-memdb.mjs
 
+cd ai-service
+venv\Scripts\activate
+uvicorn app.main:app --reload
 ## 📋 Overview
 
 NexLearn is a full-stack learning platform with:
@@ -8,6 +13,22 @@ NexLearn is a full-stack learning platform with:
 - **AI Service**: Python/FastAPI + Gemini API + Pinecone + Sentence Transformers
 
 This document covers all setup issues and their fixes.
+
+## 🚦 Troubleshooting: "Too Many Requests" (HTTP 429)
+
+If you see a "Too many requests" or 429 error while generating quizzes, flashcards, or knowledge graphs, you are hitting the **Groq API Rate Limits**.
+
+**Why it happens:**
+Groq's free tier is incredibly fast but enforces strict limits on:
+1. **Requests per Minute (RPM):** Typically ~30 requests per minute.
+2. **Tokens per Minute (TPM):** Generating large outputs (like full quizzes) quickly consumes token limits.
+3. **Tokens per Day:** A hard cap per day (usually ~14,400 requests or equivalent tokens).
+
+**How to fix it:**
+- **Wait a minute:** Most limits reset every 60 seconds. Wait 1-2 minutes and try clicking generate again.
+- **Check the Terminal:** Look at the `ai-service` terminal logs. Groq usually provides a clear message about exactly how long you need to wait before making another request.
+- **Space out actions:** Avoid rapidly generating multiple quizzes or graphs back-to-back.
+- **Change API Keys (If needed):** If you hit the daily limit, you'll need to wait 24 hours, or create a new API key on [console.groq.com](https://console.groq.com).
 
 ---
 

@@ -1,25 +1,123 @@
+/* ══════════════════════════════════════════════
+   TEACHER DASHBOARD — NexLearn v2
+══════════════════════════════════════════════ */
+
 .td-root {
   min-height: 100svh;
   background: var(--bg);
-  padding: 1.5rem;
   max-width: 960px;
   margin: 0 auto;
+  padding: 1.5rem 1.5rem 4rem;
 }
 
-.td-loading, .td-loading-sm {
-  display: flex; align-items: center; justify-content: center;
-  gap: 1rem; color: var(--text-muted); padding: 2rem;
-}
-
+/* ── Page header ──────────────────────────── */
 .td-header {
-  display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
-.td-title { font-size: 1.75rem; font-weight: 800; color: var(--text); }
-.td-sub   { color: var(--text-muted); font-size: 0.9rem; margin-top: 2px; }
+.td-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  margin: 0 0 0.25rem;
+}
 
-.td-body { display: flex; flex-direction: column; gap: 1.5rem; }
+.td-sub {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
 
+.td-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Tabs ─────────────────────────────────── */
+.td-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.35rem;
+}
+
+.td-tab {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: calc(var(--radius) - 4px);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+
+.td-tab--active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.35);
+}
+
+/* ── How-it-works strip ──────────────────── */
+.td-howto {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--accent-dim);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  flex-wrap: wrap;
+}
+
+.td-step {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.td-step-num {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.td-step-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.td-step-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.td-step-arrow {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ── Card ─────────────────────────────────── */
 .td-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -27,239 +125,390 @@
   padding: 1.5rem;
 }
 
-.td-section-title {
-  font-size: 1rem; font-weight: 700; color: var(--text);
-  margin-bottom: 1rem;
-  display: flex; align-items: center; gap: 0.75rem;
+.td-section-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 1.25rem;
 }
 
-.td-avg-badge {
-  font-size: 0.78rem; font-weight: 600;
-  background: var(--accent-dim); color: var(--accent);
-  padding: 2px 10px; border-radius: 20px;
-}
-
+/* ── Create / input row ──────────────────── */
 .td-create-row {
-  display: flex; gap: 0.75rem;
+  display: flex;
+  gap: 0.75rem;
 }
 
 .td-input {
-  flex: 1; padding: 0.65rem 1rem;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); color: var(--text);
-  font-size: 0.9rem; outline: none;
-  transition: border-color 0.15s;
+  flex: 1;
+  padding: 0.65rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.td-input:focus { border-color: var(--accent); }
 
-.td-btn-primary {
+.td-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.td-input::placeholder { color: var(--text-dim); }
+
+.td-code-input {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+.td-create-btn {
   padding: 0.65rem 1.25rem;
-  background: var(--accent); color: #fff;
-  border: none; border-radius: var(--radius-sm);
-  cursor: pointer; font-weight: 600; font-size: 0.88rem;
-  transition: background 0.15s, opacity 0.15s;
   white-space: nowrap;
 }
-.td-btn-primary:hover { background: var(--accent-hover); }
-.td-btn-primary:disabled { opacity: 0.5; cursor: default; }
 
-.td-btn-secondary {
-  padding: 0.65rem 1.25rem;
-  background: var(--bg-hover); color: var(--text);
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  cursor: pointer; font-weight: 600; font-size: 0.88rem;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
-.td-btn-secondary:hover { background: var(--border); }
-.td-btn-secondary:disabled { opacity: 0.5; cursor: default; }
-
+/* ── Promote banner ──────────────────────── */
 .td-promote-banner {
-  margin-top: 1rem; padding: 1rem;
-  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
-  border-radius: var(--radius-sm); display: flex;
-  align-items: center; gap: 1rem;
-  color: var(--text); font-size: 0.88rem;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: var(--text);
 }
 
-.td-class-list { display: flex; flex-direction: column; gap: 0.5rem; }
-
-.td-class-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 0.875rem 1rem;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+/* ── Classroom cards ─────────────────────── */
+.td-classroom-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
-.td-class-item:hover { border-color: var(--accent); }
-.td-class-item--active { border-color: var(--accent); background: var(--accent-dim); }
 
-.td-class-info { display: flex; flex-direction: column; gap: 2px; }
-.td-class-name { font-weight: 600; color: var(--text); font-size: 0.95rem; }
-.td-class-meta { font-size: 0.78rem; color: var(--text-muted); }
-
-.td-invite-btn {
-  padding: 0.35rem 0.75rem;
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 6px; font-size: 0.78rem; font-weight: 600;
-  color: var(--accent); cursor: pointer; letter-spacing: 0.05em;
-  transition: background 0.15s;
+.td-classroom-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
-.td-invite-btn:hover { background: var(--accent-dim); }
 
-/* Alerts */
-.td-alerts {
-  background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2);
-  border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.25rem;
+.td-classroom-card--active {
+  border-color: var(--accent);
+  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.15);
 }
-.td-alert-title { font-size: 0.85rem; font-weight: 700; color: var(--red); margin-bottom: 0.75rem; }
-.td-alert-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 0.82rem; color: var(--text); }
-.td-alert-bar-track { flex: 1; height: 6px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; }
-.td-alert-bar-fill  { height: 100%; background: var(--red); border-radius: 3px; transition: width 0.5s; }
-.td-alert-pct { width: 36px; text-align: right; color: var(--red); font-weight: 600; }
 
-/* Student table */
-.td-student-table { display: flex; flex-direction: column; gap: 0; }
+.td-classroom-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+}
+
+.td-classroom-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+.td-classroom-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.td-classroom-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.td-classroom-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.td-classroom-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+/* ── Invite code display ─────────────────── */
+.td-invite-code {
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  font-family: 'Courier New', monospace;
+  background: var(--accent-dim);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.td-copy-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.td-copy-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.td-chevron {
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* ── Detail panel (expanded student list) ── */
+.td-detail {
+  border-top: 1px solid var(--border);
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  animation: td-expand 0.2s ease;
+}
+
+@keyframes td-expand {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.td-detail-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+/* ── Student table ───────────────────────── */
+.td-student-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
 
 .td-table-header {
-  display: grid; grid-template-columns: 2fr 1.5fr 0.8fr 2fr;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 0.8fr 2fr;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.02);
   border-bottom: 1px solid var(--border);
 }
 
 .td-table-row {
-  display: grid; grid-template-columns: 2fr 1.5fr 0.8fr 2fr;
-  padding: 0.875rem 0.75rem; align-items: center;
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 0.8fr 2fr;
+  padding: 0.85rem 0.9rem;
+  align-items: center;
   border-bottom: 1px solid var(--border);
   transition: background 0.1s;
 }
+
 .td-table-row:hover { background: var(--bg-hover); }
 .td-table-row:last-child { border-bottom: none; }
 
-.td-student-info { display: flex; align-items: center; gap: 0.75rem; }
-.td-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
-.td-student-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
-.td-student-email { font-size: 0.75rem; color: var(--text-muted); }
-
-.td-mastery-cell { display: flex; align-items: center; gap: 0.5rem; }
-.td-mini-bar-track { flex: 1; height: 6px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; }
-.td-mini-bar-fill  { height: 100%; border-radius: 3px; transition: width 0.5s; }
-.td-mastery-pct { font-size: 0.82rem; font-weight: 600; color: var(--text); min-width: 36px; }
-
-.td-streak { font-size: 0.85rem; color: var(--text-muted); }
-
-.td-weak-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-.td-weak-tag {
-  font-size: 0.7rem; padding: 2px 8px;
-  background: rgba(239,68,68,0.12); color: var(--red);
-  border-radius: 20px; border: 1px solid rgba(239,68,68,0.25);
-}
-.td-strong { font-size: 0.78rem; color: var(--green); font-weight: 600; }
-.td-empty { color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0; text-align: center; }
-
-/* Responsive */
-@media (max-width: 768px) {
-  .td-root { padding: 1rem; }
-  .td-table-header, .td-table-row { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-  .td-table-header span:nth-child(n+3), .td-table-row > *:nth-child(n+3) { display: none; }
-  .td-create-row { flex-direction: column; }
+.td-student-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
 }
 
-/* ── Tabs ─────────────────────────────── */
-.td-tabs {
-  display: flex; gap: 0.5rem;
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 0.35rem;
-}
-.td-tab {
-  flex: 1; padding: 0.6rem 1rem;
-  border: none; border-radius: calc(var(--radius) - 4px);
-  background: transparent; color: var(--text-muted);
-  font-size: 0.9rem; font-weight: 600; cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  font-family: inherit;
-}
-.td-tab--active {
-  background: var(--accent); color: #fff;
+.td-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
 }
 
-/* ── How it works ─────────────────────── */
-.td-howto {
-  display: flex; align-items: center; gap: 0.75rem;
-  background: var(--accent-dim); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1rem 1.25rem;
+.td-student-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.td-mastery-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.td-mini-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.td-mini-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.td-mastery-pct {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 36px;
+  text-align: right;
+}
+
+.td-streak {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.td-weak-tags {
+  display: flex;
   flex-wrap: wrap;
+  gap: 4px;
 }
-.td-howto-step {
-  display: flex; align-items: center; gap: 0.5rem;
-}
-.td-howto-num {
-  width: 24px; height: 24px; background: var(--accent); color: #fff;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 0.75rem; font-weight: 800; flex-shrink: 0;
-}
-.td-howto-step p { font-size: 0.85rem; color: var(--text); margin: 0; }
-.td-howto-arrow { color: var(--text-dim); font-size: 1.1rem; }
 
-/* ── Invite code block ────────────────── */
-.td-class-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
-.td-invite-block { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.td-invite-label { font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
-.td-invite-code {
-  font-size: 1rem; font-weight: 800; letter-spacing: 0.15em;
-  color: var(--accent); font-family: 'Courier New', monospace;
+/* ── Empty states ────────────────────────── */
+.td-empty {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
 }
-.td-copy-btn {
-  padding: 0.4rem 0.9rem;
-  background: var(--bg-card); border: 1px solid var(--accent);
-  border-radius: 8px; font-size: 0.78rem; font-weight: 600;
-  color: var(--accent); cursor: pointer;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
-.td-copy-btn:hover { background: var(--accent-dim); }
 
-/* ── Empty state ──────────────────────── */
-.td-empty-state {
-  text-align: center; padding: 2rem;
-  color: var(--text-muted); font-size: 0.9rem;
-}
-.td-empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
 .td-big-code {
-  font-size: 2rem; font-weight: 900; letter-spacing: 0.2em;
-  color: var(--accent); margin: 0.75rem 0;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--accent);
   font-family: 'Courier New', monospace;
 }
-.td-hint { font-size: 0.82rem; color: var(--text-dim); }
 
-/* ── Student join panel ───────────────── */
-.td-student-howto { display: flex; flex-direction: column; gap: 1rem; }
-.td-howto-desc {
-  font-size: 0.9rem; color: var(--text-muted);
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 1rem;
+.td-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.td-empty-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.td-empty-desc {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  max-width: 340px;
+}
+
+/* ── Student join panel ──────────────────── */
+.td-join-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
   line-height: 1.6;
+  margin: 0 0 1.25rem;
 }
-.td-howto-desc code {
-  background: var(--accent-dim); color: var(--accent);
-  padding: 2px 6px; border-radius: 4px; font-size: 0.9em;
-}
-.td-code-input {
-  font-size: 1rem; font-weight: 700; letter-spacing: 0.15em;
-  text-transform: uppercase; font-family: 'Courier New', monospace;
-}
+
 .td-join-msg {
-  font-size: 0.88rem; font-weight: 600; padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
+  margin-top: 0.75rem;
 }
-.td-join-ok { background: rgba(16,185,129,0.1); color: var(--green); }
-.td-join-err { background: rgba(239,68,68,0.1); color: var(--red); }
+
+.td-join-ok  { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+.td-join-err { background: rgba(239, 68, 68, 0.1);  color: var(--red); }
 
 .td-student-note {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 1rem;
-  font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;
+  margin-top: 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
-.td-student-note ul { padding-left: 1.25rem; margin: 0.5rem 0 0; }
-.td-student-note li { margin-bottom: 4px; }
+
+/* ── Loading ─────────────────────────────── */
+.td-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--text-muted);
+  padding: 2rem;
+  min-height: 60vh;
+}
+
+/* ── Responsive ──────────────────────────── */
+@media (max-width: 768px) {
+  .td-root { padding: 1rem 1rem 3rem; }
+  .td-table-header { grid-template-columns: 1fr 1fr; }
+  .td-table-row    { grid-template-columns: 1fr 1fr; }
+  .td-table-header span:nth-child(n+3),
+  .td-table-row > *:nth-child(n+3) { display: none; }
+  .td-create-row { flex-direction: column; }
+  .td-classroom-right { gap: 0.4rem; }
+}
+
+/* ── Light Theme Overrides ───────────────── */
+[data-theme="light"] .td-copy-btn,
+[data-theme="light"] .td-detail,
+[data-theme="light"] .td-table-header {
+  background: var(--bg-hover);
+}
+
+[data-theme="light"] .td-mini-bar {
+  background: var(--border-strong);
+}

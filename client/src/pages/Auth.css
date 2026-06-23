@@ -1,0 +1,137 @@
+/* ════════════════════════════════════════
+   AUTH PAGES — SignIn & SignUp shared CSS
+════════════════════════════════════════ */
+
+.auth-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient glow orbs */
+.auth-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.auth-orb--indigo {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+}
+.auth-orb--purple {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%);
+  bottom: -80px;
+  right: -80px;
+}
+
+/* Two-column layout on wide screens */
+.auth-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* ── Left: branding ──────────────────── */
+.auth-brand {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-logo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(99,102,241,0.45);
+  margin-bottom: 0.25rem;
+}
+
+.auth-title {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin: 0;
+}
+
+.auth-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 36ch;
+}
+
+/* Feature pills */
+.auth-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.auth-pill {
+  padding: 0.3rem 0.75rem;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #a5b4fc;
+}
+
+/* ── Right: Clerk widget ─────────────── */
+.auth-widget {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Clerk overrides (targeting rendered elements) */
+:global(.clerk-card),
+.auth-widget > div {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* ── Responsive: stack on mobile ─────── */
+@media (max-width: 700px) {
+  .auth-container {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .auth-brand {
+    width: 100%;
+  }
+  .auth-widget {
+    width: 100%;
+    max-width: 100%;
+  }
+  .auth-title {
+    font-size: 1.6rem;
+  }
+}

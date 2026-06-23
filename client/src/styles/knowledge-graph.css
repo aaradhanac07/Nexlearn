@@ -149,6 +149,42 @@
 .kg-empty h2   { font-size: 1.5rem; font-weight: 700; color: #f1f5f9; margin: 0; }
 .kg-empty p    { color: #64748b; max-width: 340px; }
 
+/* Light Theme Overrides */
+[data-theme="light"] .kg-root {
+  background: #f8fafc;
+  color: #0f172a;
+}
+[data-theme="light"] .kg-header {
+  background: rgba(255,255,255,0.8);
+  border-bottom-color: rgba(0,0,0,0.08);
+}
+[data-theme="light"] .kg-title { color: #0f172a; }
+[data-theme="light"] .kg-detail-panel {
+  background: rgba(255,255,255,0.95);
+  border-left-color: rgba(0,0,0,0.1);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.05);
+}
+[data-theme="light"] .kg-detail-title { color: #0f172a; }
+[data-theme="light"] .kg-close { background: rgba(0,0,0,0.05); color: #475569; }
+[data-theme="light"] .kg-close:hover { background: rgba(0,0,0,0.1); color: #0f172a; }
+[data-theme="light"] .kg-mastery-bar { background: rgba(0,0,0,0.1); }
+[data-theme="light"] .kg-detail-desc,
+[data-theme="light"] .kg-legend { color: #475569; }
+[data-theme="light"] .kg-empty h2 { color: #0f172a; }
+[data-theme="light"] .kg-empty p { color: #475569; }
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .kg-detail-panel {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  [data-theme="light"] .kg-detail-panel {
+    border-top-color: rgba(0,0,0,0.1);
+  }
+}
+
 @keyframes slideInRight {
   from { transform: translateX(20px); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
