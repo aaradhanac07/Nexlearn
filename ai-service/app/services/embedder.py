@@ -15,8 +15,8 @@ def get_embedding(text: str) -> list:
 def embed_and_store(chunks: list, course_id: str, user_id: str):
     if not chunks:
         return
-    # Batch-encode all chunks at once — much faster than one-by-one
-    embeddings = embed_model.encode(chunks, batch_size=64, show_progress_bar=False).tolist()
+    # Batch-encode all chunks with a smaller batch size to prevent OOM
+    embeddings = embed_model.encode(chunks, batch_size=8, show_progress_bar=False).tolist()
     vectors = [
         {
             "id": f"{course_id}_{i}",
@@ -45,8 +45,8 @@ def embed_and_store_with_meta(chunks_with_meta: list, course_id: str, user_id: s
         return
     EXTRA_KEYS = ("sourceType", "videoId", "startTimestamp", "endTimestamp", "sourceName")
     texts    = [c["text"] for c in chunks_with_meta]
-    # Batch-encode all texts in one shot
-    embeddings = embed_model.encode(texts, batch_size=64, show_progress_bar=False).tolist()
+    # Batch-encode all texts with a smaller batch size to prevent OOM
+    embeddings = embed_model.encode(texts, batch_size=8, show_progress_bar=False).tolist()
 
     vectors = []
     for i, chunk_data in enumerate(chunks_with_meta):
