@@ -82,10 +82,12 @@ const io = new SocketServer(httpServer, {
   cors: {
     origin: (origin, cb) => {
       if (!origin) return cb(null, true)
+      if (allowedOrigins.includes(origin)) return cb(null, true)
       if (origin.match(/^http:\/\/localhost:\d+$/)) return cb(null, true)
       cb(new Error('Not allowed by CORS'))
     },
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 })
 initStudyRoomSocket(io)
