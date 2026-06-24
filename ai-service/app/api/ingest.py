@@ -80,7 +80,6 @@ async def ingest_pdf(
 
         import gc
         del file_bytes
-        del full_text
         gc.collect()
 
         embed_and_store(chunks, courseId, userId)
