@@ -63,6 +63,7 @@ async def ingest_pdf(
         logger.info("[STEP 1] About to parse PDF from stream")
 
         try:
+            await file.seek(0)   # ensure stream is at the start
             full_text = parse_pdf(file.file)
             logger.info("[STEP 2] PDF parsed successfully")
             logger.info(f"[PDF PARSED] Extracted {len(full_text)} characters")
