@@ -54,11 +54,20 @@ async def ingest_pdf(
     try:
         logger.info(f"[INGEST START] courseId={courseId}, userId={userId}, filename={file.filename}")
 
+        # file_bytes = await file.read()
+        # logger.info(f"[FILE READ] File size: {len(file_bytes)} bytes")
+
+        # try:
+        #     full_text = parse_pdf(file_bytes)
+        #     logger.info(f"[PDF PARSED] Extracted {len(full_text)} characters")
         file_bytes = await file.read()
         logger.info(f"[FILE READ] File size: {len(file_bytes)} bytes")
 
+        logger.info("[STEP 1] About to parse PDF")
+
         try:
             full_text = parse_pdf(file_bytes)
+            logger.info("[STEP 2] PDF parsed successfully")
             logger.info(f"[PDF PARSED] Extracted {len(full_text)} characters")
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"PDF parsing failed: {str(e)}")
