@@ -33,62 +33,80 @@ def extract_video_id(url: str) -> Optional[str]:
 
 def fetch_transcript(video_id: str) -> List[Dict]:
     """
-    Fetch caption segments from YouTube using youtube-transcript-api v1.x.
-    Returns list of {text, start, duration} dicts for compatibility with the
-    rest of the pipeline.
+    Fetch caption segments from YouTube using yt-dlp (bypasses most IP bans).
+    Returns list of {text, start, duration} dicts.
     Raises ValueError with a user-friendly message when captions are unavailable.
     """
-    from youtube_transcript_api import (
-        YouTubeTranscriptApi,
-        TranscriptsDisabled,
-        NoTranscriptFound,
-        CouldNotRetrieveTranscript,
-        VideoUnavailable,
-    )
-
-    api = YouTubeTranscriptApi()
-
+    import yt_dlp
+    import requests
+    
+    ydl_opts = {
+        'skip_download': True,
+        'writesubtitles': True,
+        'writeautomaticsub': True,
+        'subtitleslangs': ['en'],
+        'quiet': True,
+        'dump_single_json': True,
+        'extract_flat': False
+    }
+    
     try:
-        # Try preferred languages first; if none match, fall back to any available
-        try:
-            fetched = api.fetch(video_id, languages=_LANGUAGES)
-        except NoTranscriptFound:
-            # Try listing all available transcripts and pick the first one
-            try:
-                transcript_list = api.list(video_id)
-                transcript = next(iter(transcript_list))
-                fetched = transcript.fetch()
-            except StopIteration:
-                raise NoTranscriptFound(video_id, _LANGUAGES, None)
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(f'https://www.youtube.com/watch?v={video_id}', download=False)
+            
+            subs = info.get('subtitles', {})
+            auto_subs = info.get('automatic_captions', {})
+            
+            url = None
+            if 'en' in subs:
+                url = subs['en'][0]['url']
+            elif 'en' in auto_subs:
+                url = auto_subs['en'][0]['url']
+                
+            if not url:
+                # Fallback to any available language if english is not found
+                for lang in subs:
+                    url = subs[lang][0]['url']
+                    break
+                if not url:
+                    for lang in auto_subs:
+                        url = auto_subs[lang][0]['url']
+                        break
+            
+            if not url:
+                raise ValueError(
+                    "No captions found for this video. "
+                    "Make sure the video has auto-generated or manual captions enabled."
+                )
+                
+            res = requests.get(url, timeout=10)
+            res.raise_for_status()
+            data = res.json()
+            
+            segments = []
+            for event in data.get('events', []):
+                if 'segs' in event:
+                    text = ''.join(seg.get('utf8', '') for seg in event['segs']).replace('\n', ' ').strip()
+                    if not text:
+                        continue
+                    start = event.get('tStartMs', 0) / 1000.0
+                    duration = event.get('dDurationMs', 0) / 1000.0
+                    segments.append({"text": text, "start": start, "duration": duration})
+                    
+            if not segments:
+                raise ValueError("Parsed transcript was empty.")
+                
+            logger.info(f"[YT] Fetched {len(segments)} caption segments for {video_id}")
+            return segments
 
-        # Convert FetchedTranscriptSnippet dataclass objects → plain dicts
-        segments = [
-            {"text": s.text, "start": s.start, "duration": s.duration}
-            for s in fetched
-            if s.text and s.text.strip()
-        ]
-
-        logger.info(f"[YT] Fetched {len(segments)} caption segments for {video_id}")
-        return segments
-
-    except TranscriptsDisabled:
-        raise ValueError(
-            "This video has captions disabled by its creator. "
-            "Try a different video, or use the Text tab to paste a transcript manually."
-        )
-    except NoTranscriptFound:
-        raise ValueError(
-            "No captions found for this video. "
-            "Make sure the video has auto-generated or manual captions enabled."
-        )
-    except VideoUnavailable:
-        raise ValueError(
-            "This video is unavailable or private. Please check the URL and try again."
-        )
-    except CouldNotRetrieveTranscript as e:
-        raise ValueError(f"Could not retrieve transcript: {str(e)}")
+    except ValueError as ve:
+        raise ve
     except Exception as e:
-        raise ValueError(f"Could not fetch transcript: {str(e)}")
+        logger.error(f"yt-dlp fetch failed for {video_id}: {str(e)}")
+        raise ValueError(
+            "This video is unavailable, private, or YouTube is blocking requests. "
+            "Please try another video or paste text manually."
+        )
 
 
 def chunk_transcript_with_timestamps(

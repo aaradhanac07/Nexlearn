@@ -63,8 +63,10 @@ async def ingest_pdf(
         logger.info("[STEP 1] About to parse PDF from stream")
 
         try:
-            await file.seek(0)   # ensure stream is at the start
-            full_text = parse_pdf(file.file)
+            file_bytes = await file.read()
+            full_text = parse_pdf(file_bytes)
+            del file_bytes
+            
             logger.info("[STEP 2] PDF parsed successfully")
             logger.info(f"[PDF PARSED] Extracted {len(full_text)} characters")
         except Exception as e:
@@ -321,12 +323,12 @@ async def ingest_merge(
             sources  = []
             all_flashcards = []
 
-            # ── PDF branch ────────────────────────────────────────────────
             if has_pdf:
                 yield _stage("fetching", f"Reading PDF: {file.filename}…")
                 file_bytes = await file.read()
                 try:
                     pdf_text = await asyncio.to_thread(parse_pdf, file_bytes)
+                    del file_bytes
                 except Exception as e:
                     yield _error(f"PDF parse failed: {str(e)}")
                     return
