@@ -9,6 +9,8 @@ uvicorn app.main:app --reload
 
 DEPLOYMENT
 server  https://nexlearn-backend-rc3c.onrender.com
+AI_SERVICE_URL=https://nexlearn-ai.onrender.com
+VITE_API_URL=https://nexlearn-backend-rc3c.onrender.com
 
 NexLearn is a full-stack learning platform with:
 - **Frontend**: React + Vite + Clerk Auth
