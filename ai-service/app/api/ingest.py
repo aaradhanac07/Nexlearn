@@ -60,13 +60,10 @@ async def ingest_pdf(
         # try:
         #     full_text = parse_pdf(file_bytes)
         #     logger.info(f"[PDF PARSED] Extracted {len(full_text)} characters")
-        file_bytes = await file.read()
-        logger.info(f"[FILE READ] File size: {len(file_bytes)} bytes")
-
-        logger.info("[STEP 1] About to parse PDF")
+        logger.info("[STEP 1] About to parse PDF from stream")
 
         try:
-            full_text = parse_pdf(file_bytes)
+            full_text = parse_pdf(file.file)
             logger.info("[STEP 2] PDF parsed successfully")
             logger.info(f"[PDF PARSED] Extracted {len(full_text)} characters")
         except Exception as e:
@@ -78,8 +75,11 @@ async def ingest_pdf(
         chunks = chunk_text(full_text)
         logger.info(f"[CHUNKING COMPLETE] Created {len(chunks)} chunks")
 
+        text_for_meta = full_text[:3000]
+        text_for_cards = full_text[:4000]
+
         import gc
-        del file_bytes
+        del full_text
         gc.collect()
 
         embed_and_store(chunks, courseId, userId)
@@ -87,8 +87,8 @@ async def ingest_pdf(
 
         # ── Run metadata + flashcards in parallel ────────────────────────────
         import asyncio as _aio
-        meta_task  = _aio.to_thread(generate_summary_and_concepts, full_text)
-        cards_task = _aio.to_thread(generate_flashcards, full_text)
+        meta_task  = _aio.to_thread(generate_summary_and_concepts, text_for_meta)
+        cards_task = _aio.to_thread(generate_flashcards, text_for_cards)
         results = await _aio.gather(meta_task, cards_task, return_exceptions=True)
 
         metadata   = results[0] if not isinstance(results[0], Exception) else \
@@ -162,8 +162,15 @@ async def ingest_youtube(
 
             # 5 + 6. Analyse content & generate flashcards IN PARALLEL
             yield _stage("analyzing", "Building knowledge graph and generating flashcards…")
-            meta_task  = asyncio.to_thread(generate_summary_and_concepts, full_text)
-            cards_task = asyncio.to_thread(generate_flashcards, full_text)
+
+            text_for_meta = full_text[:3000]
+            text_for_cards = full_text[:4000]
+            del full_text
+            import gc
+            gc.collect()
+
+            meta_task  = asyncio.to_thread(generate_summary_and_concepts, text_for_meta)
+            cards_task = asyncio.to_thread(generate_flashcards, text_for_cards)
             _results   = await asyncio.gather(meta_task, cards_task, return_exceptions=True)
 
             metadata   = _results[0] if not isinstance(_results[0], Exception) else \
@@ -173,7 +180,7 @@ async def ingest_youtube(
             # Study order uses concepts from metadata — still fast, runs after
             try:
                 study_order = await asyncio.to_thread(
-                    generate_study_order, metadata.get("concepts", []), full_text
+                    generate_study_order, metadata.get("concepts", [])
                 )
             except Exception:
                 study_order = metadata.get("concepts", [])
@@ -241,8 +248,15 @@ async def ingest_text(
             yield _stage("embedding", "Knowledge base updated ✓")
 
             yield _stage("analyzing", "Building knowledge graph and generating flashcards…")
-            meta_task  = asyncio.to_thread(generate_summary_and_concepts, text)
-            cards_task = asyncio.to_thread(generate_flashcards, text)
+
+            text_for_meta = text[:3000]
+            text_for_cards = text[:4000]
+            del text
+            import gc
+            gc.collect()
+
+            meta_task  = asyncio.to_thread(generate_summary_and_concepts, text_for_meta)
+            cards_task = asyncio.to_thread(generate_flashcards, text_for_cards)
             _results   = await asyncio.gather(meta_task, cards_task, return_exceptions=True)
 
             metadata   = _results[0] if not isinstance(_results[0], Exception) else \
@@ -251,7 +265,7 @@ async def ingest_text(
 
             try:
                 study_order = await asyncio.to_thread(
-                    generate_study_order, metadata.get("concepts", []), text
+                    generate_study_order, metadata.get("concepts", [])
                 )
             except Exception:
                 study_order = metadata.get("concepts", [])
@@ -359,8 +373,14 @@ async def ingest_merge(
             combined_text = (pdf_text + " " + yt_text).strip()
             yield _stage("analyzing", "Cross-referencing sources and building unified knowledge graph…")
 
-            meta_task  = asyncio.to_thread(generate_summary_and_concepts, combined_text)
-            cards_task = asyncio.to_thread(generate_flashcards, combined_text)
+            text_for_meta = combined_text[:3000]
+            text_for_cards = combined_text[:4000]
+            del combined_text
+            import gc
+            gc.collect()
+
+            meta_task  = asyncio.to_thread(generate_summary_and_concepts, text_for_meta)
+            cards_task = asyncio.to_thread(generate_flashcards, text_for_cards)
             _results   = await asyncio.gather(meta_task, cards_task, return_exceptions=True)
 
             metadata      = _results[0] if not isinstance(_results[0], Exception) else \
@@ -376,7 +396,7 @@ async def ingest_merge(
 
             try:
                 study_order = await asyncio.to_thread(
-                    generate_study_order, metadata.get("concepts", []), combined_text
+                    generate_study_order, metadata.get("concepts", [])
                 )
             except Exception:
                 study_order = metadata.get("concepts", [])

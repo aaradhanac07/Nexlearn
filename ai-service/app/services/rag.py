@@ -4,20 +4,19 @@ RAG service — retrieves context from Pinecone + generates metadata using Groq.
 import json
 import re
 import logging
-from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone
 from app.core.config import settings
 from app.services.groq_client import groq_complete, strip_code_fences, FAST_MODEL, SMART_MODEL
+from app.services.embedder import get_embedding
 
 logger = logging.getLogger(__name__)
 
-embed_model = SentenceTransformer('all-MiniLM-L6-v2')
 pc    = Pinecone(api_key=settings.pinecone_api_key)
 index = pc.Index(settings.pinecone_index)
 
 
 def get_query_embedding(text: str) -> list:
-    return embed_model.encode(text).tolist()
+    return get_embedding(text)
 
 
 # ─── Basic retrieval (plain text, backward-compatible) ────────────────────────
