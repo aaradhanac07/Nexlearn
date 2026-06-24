@@ -5,6 +5,9 @@ node dev-with-memdb.mjs
 cd ai-service
 venv\Scripts\activate
 uvicorn app.main:app --reload
+
+cd client
+npm run dev
 ## 📋 Overview
 
 DEPLOYMENT
