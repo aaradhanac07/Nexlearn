@@ -1,8 +1,11 @@
 from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone
 from app.core.config import settings
+import torch
 
-embed_model = SentenceTransformer('all-MiniLM-L6-v2')
+# STRICT MEMORY LIMITS FOR FREE TIER (512MB RAM)
+torch.set_num_threads(1)
+embed_model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
 
 pc = Pinecone(api_key=settings.pinecone_api_key)
 index = pc.Index(settings.pinecone_index)
@@ -15,8 +18,11 @@ def get_embedding(text: str) -> list:
 def embed_and_store(chunks: list, course_id: str, user_id: str):
     if not chunks:
         return
-    # Batch-encode all chunks with a smaller batch size to prevent OOM
-    embeddings = embed_model.encode(chunks, batch_size=8, show_progress_bar=False).tolist()
+    # Batch-encode all chunks with a minimal batch size to prevent OOM
+    embeddings = []
+    for i in range(0, len(chunks), 2):
+        batch = chunks[i:i+2]
+        embeddings.extend(embed_model.encode(batch, batch_size=2, show_progress_bar=False).tolist())
     vectors = [
         {
             "id": f"{course_id}_{i}",
@@ -45,8 +51,11 @@ def embed_and_store_with_meta(chunks_with_meta: list, course_id: str, user_id: s
         return
     EXTRA_KEYS = ("sourceType", "videoId", "startTimestamp", "endTimestamp", "sourceName")
     texts    = [c["text"] for c in chunks_with_meta]
-    # Batch-encode all texts with a smaller batch size to prevent OOM
-    embeddings = embed_model.encode(texts, batch_size=8, show_progress_bar=False).tolist()
+    # Batch-encode all texts with a minimal batch size to prevent OOM
+    embeddings = []
+    for i in range(0, len(texts), 2):
+        batch = texts[i:i+2]
+        embeddings.extend(embed_model.encode(batch, batch_size=2, show_progress_bar=False).tolist())
 
     vectors = []
     for i, chunk_data in enumerate(chunks_with_meta):

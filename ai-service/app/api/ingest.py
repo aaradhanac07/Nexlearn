@@ -78,6 +78,11 @@ async def ingest_pdf(
         chunks = chunk_text(full_text)
         logger.info(f"[CHUNKING COMPLETE] Created {len(chunks)} chunks")
 
+        import gc
+        del file_bytes
+        del full_text
+        gc.collect()
+
         embed_and_store(chunks, courseId, userId)
         logger.info("[EMBEDDING COMPLETE] Stored in Pinecone")
 
