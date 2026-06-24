@@ -21,7 +21,7 @@ google-genai==1.7.0
 langchain==0.2.1
 langchain-community==0.2.1
 pinecone-client==4.1.0
-pdfplumber==0.11.0
+pypdf>=4.0.0
 yt-dlp==2024.5.27
 playwright==1.44.0
 httpx>=0.28.1,<1.0.0
