@@ -7,6 +7,9 @@ venv\Scripts\activate
 uvicorn app.main:app --reload
 ## 📋 Overview
 
+DEPLOYMENT
+server  https://nexlearn-backend-rc3c.onrender.com
+
 NexLearn is a full-stack learning platform with:
 - **Frontend**: React + Vite + Clerk Auth
 - **Backend**: Node.js/Express + MongoDB + Redis
